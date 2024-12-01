@@ -77,7 +77,7 @@ export class BridgeAction {
             from: fromAddress,
             to: routes.routes[0].steps[0].estimate
                 .approvalAddress as `0x${string}`,
-            value: BigInt(params.amount),
+            value: BigInt(params.amount).toString(),
             chainId: getChainConfigs(this.walletProvider.runtime)[
                 params.fromChain
             ].chainId,
@@ -87,7 +87,7 @@ export class BridgeAction {
 
 export const bridgeAction = {
     name: "bridge",
-    description: "Bridge tokens between different chains",
+    description: "Bridge tokens between different chains via the LiFi SDK",
     handler: async (
         runtime: IAgentRuntime,
         message: Memory,

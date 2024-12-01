@@ -1,3 +1,6 @@
+export * from "./getbalance";
+export * from "./swap";
+
 export const transferTemplate = `Given the recent messages and wallet information below:
 
 {{recentMessages}}
@@ -44,31 +47,6 @@ Respond with a JSON markdown block containing only the extracted values:
     "toChain": "ethereum" | "base" | null,
     "amount": string | null,
     "toAddress": string | null
-}
-\`\`\`
-`;
-
-export const swapTemplate = `Given the recent messages and wallet information below:
-
-{{recentMessages}}
-
-{{walletInfo}}
-
-Extract the following information about the requested token swap:
-- Input token symbol or address (the token being sold)
-- Output token symbol or address (the token being bought)
-- Amount to swap
-- Chain to execute on (ethereum or base)
-
-Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined:
-
-\`\`\`json
-{
-    "inputToken": string | null,
-    "outputToken": string | null,
-    "amount": string | null,
-    "chain": "ethereum" | "base" | null,
-    "slippage": number | null
 }
 \`\`\`
 `;

@@ -41,7 +41,7 @@ export class TransferAction {
                 hash,
                 from: fromAddress,
                 to: params.toAddress,
-                value: parseEther(params.amount),
+                value: parseEther(params.amount).toString(),
                 data: params.data as Hex,
             };
         } catch (error) {

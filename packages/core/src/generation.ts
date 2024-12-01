@@ -180,7 +180,7 @@ export async function generateText({
                 });
 
                 response = anthropicResponse;
-                elizaLogger.debug("Received response from Anthropic model.");
+                elizaLogger.debug("Received response from Anthropic model: ", response);
                 break;
             }
 

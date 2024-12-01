@@ -11,7 +11,7 @@ import {
     type Address,
     Account,
 } from "viem";
-import { mainnet, base } from "viem/chains";
+import { mainnet, base, sepolia } from "viem/chains";
 import type { SupportedChain, ChainConfig, ChainMetadata } from "../types";
 import { privateKeyToAccount } from "viem/accounts";
 
@@ -39,6 +39,18 @@ export const DEFAULT_CHAIN_CONFIGS: Record<SupportedChain, ChainMetadata> = {
             decimals: 18,
         },
         blockExplorerUrl: "https://basescan.org",
+    },
+    sepolia: {
+        chainId: 11155111,
+        name: "Sepolia",
+        chain: sepolia,
+        rpcUrl: "https://rpc.sepolia.org",
+        nativeCurrency: {
+            name: "Sepolia Ether",
+            symbol: "ETH",
+            decimals: 18,
+        },
+        blockExplorerUrl: "https://sepolia.etherscan.io",
     },
 } as const;
 
@@ -83,6 +95,7 @@ export class WalletProvider {
         this.chainConfigs = {
             ethereum: createClients("ethereum"),
             base: createClients("base"),
+            sepolia: createClients("sepolia"),
         };
     }
 
@@ -112,39 +125,6 @@ export class WalletProvider {
         runtime: IAgentRuntime,
         chain: SupportedChain
     ): Promise<void> {
-        const walletClient = this.chainConfigs[this.currentChain].walletClient;
-        if (!walletClient) throw new Error("Wallet not connected");
-
-        try {
-            await walletClient.switchChain({
-                id: getChainConfigs(runtime)[chain].chainId,
-            });
-        } catch (error: any) {
-            if (error.code === 4902) {
-                console.log(
-                    "[WalletProvider] Chain not added to wallet (error 4902) - attempting to add chain first"
-                );
-                await walletClient.addChain({
-                    chain: {
-                        ...getChainConfigs(runtime)[chain].chain,
-                        rpcUrls: {
-                            default: {
-                                http: [getChainConfigs(runtime)[chain].rpcUrl],
-                            },
-                            public: {
-                                http: [getChainConfigs(runtime)[chain].rpcUrl],
-                            },
-                        },
-                    },
-                });
-                await walletClient.switchChain({
-                    id: getChainConfigs(runtime)[chain].chainId,
-                });
-            } else {
-                throw error;
-            }
-        }
-
         this.currentChain = chain;
     }
 
